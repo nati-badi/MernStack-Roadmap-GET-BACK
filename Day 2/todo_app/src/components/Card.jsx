@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Card({ todo, onDelete, onEdit, onCancel, onSave }) {
+function Card({ todo, onDelete, onEdit }) {
   const [editMode, setEditMode] = useState(false);
   const [editedText, setEditedText] = useState(todo);
 
@@ -8,6 +8,7 @@ function Card({ todo, onDelete, onEdit, onCancel, onSave }) {
     if (editedText.trim() === "") {
       setEditedText(todo);
       setEditMode(false);
+      return;
     }
 
     onEdit(editedText);

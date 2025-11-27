@@ -35,17 +35,15 @@ function Home() {
     setTodos(newTodos);
   };
 
-  const handleCancel = () => {};
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-300 p-4">
-      <div className="min-h-[80vh] max-h-[80vh] bg-white p-8 rounded-sm shadow-2xl w-full max-w-lg transition-all duration-300 ease-in-out">
+      <div className="flex flex-col max-h-[80vh] bg-white p-8 rounded-sm shadow-2xl w-full max-w-lg transition-all duration-300 ease-in-out">
         <h1 className="text-3xl font-extrabold text-gray-800 mb-6 text-center border-b-2 border-indigo-400 pb-2 tracking-wide">
           To-Do List 📝✨
         </h1>
-        <div className="flex">
+        <div className="flex mb-4">
           <input
-            className="p-2 mb-3 w-full border-2 border-gray-300 rounded-md outline-none"
+            className="p-2 w-full border-2 border-gray-300 rounded-md outline-none"
             type="text"
             value={newText}
             placeholder="Add your task"
@@ -64,7 +62,7 @@ function Home() {
             Save
           </button>
         </div>
-        <div className="min-h-[53vh] max-h-[53vh] overflow-y-auto">
+        <div className="flex-1 overflow-y-scroll pr-2 min-h-[53vh]">
           {todos.map((todo, index) => (
             <Card
               todo={todo}
