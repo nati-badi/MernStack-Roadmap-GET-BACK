@@ -70,7 +70,7 @@ function Home() {
               todo={todo}
               key={index}
               onDelete={() => handleDelete(index)}
-              onEdit={() => handleEdit(index, newText)}
+              onEdit={(editedText) => handleEdit(index, editedText)}
             />
           ))}
         </div>
