@@ -38,8 +38,8 @@ function Home() {
   const handleCancel = () => {};
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-sm shadow-2xl w-full max-w-lg transition-all duration-300 ease-in-out">
+    <div className="flex items-center justify-center min-h-screen bg-gray-300 p-4">
+      <div className="min-h-[80vh] max-h-[80vh] bg-white p-8 rounded-sm shadow-2xl w-full max-w-lg transition-all duration-300 ease-in-out">
         <h1 className="text-3xl font-extrabold text-gray-800 mb-6 text-center border-b-2 border-indigo-400 pb-2 tracking-wide">
           To-Do List 📝✨
         </h1>
@@ -50,6 +50,11 @@ function Home() {
             value={newText}
             placeholder="Add your task"
             onChange={(e) => setNewText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSave(newText);
+              }
+            }}
           />
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold h-full  p-2 ml-2 rounded-md"
@@ -59,14 +64,16 @@ function Home() {
             Save
           </button>
         </div>
-        {todos.map((todo, index) => (
-          <Card
-            todo={todo}
-            key={index}
-            onDelete={() => handleDelete(index)}
-            onEdit={() => handleEdit(index, newText)}
-          />
-        ))}
+        <div className="min-h-[53vh] max-h-[53vh] overflow-y-auto">
+          {todos.map((todo, index) => (
+            <Card
+              todo={todo}
+              key={index}
+              onDelete={() => handleDelete(index)}
+              onEdit={() => handleEdit(index, newText)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
