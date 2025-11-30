@@ -147,35 +147,6 @@ const Card = ({ pokemonData }) => {
           </div>
         </div>
       </div>
-
-      {/* Inline styles for glow + aura */}
-      <style>{`
-        /* Aura container */
-        .card-aura {
-          width: 120%;
-          height: 120%;
-          margin: -10% 0 0 -10%;
-          filter: blur(28px);
-          transform: translateZ(0);
-          background: radial-gradient(40% 40% at 50% 30%, rgba(255,245,200,0.28), rgba(255,200,60,0.12) 25%, transparent 40%),
-                      radial-gradient(60% 40% at 30% 70%, rgba(255,255,255,0.06), transparent 35%);
-          transition: opacity 300ms ease, transform 300ms ease, box-shadow 300ms ease;
-          opacity: 0.28; /* subtle idle glow */
-          pointer-events: none;
-        }
-
-        /* stronger glow on hover (group is parent) */
-        .group:hover .card-aura {
-          opacity: 0.9;
-          filter: blur(34px) saturate(1.2);
-          transform: scale(1.02);
-        }
-
-        /* small bright ring on hover (pokemon aura effect) */
-        .group:hover {
-          box-shadow: 0 28px 65px -12px rgba(255,215,80,0.45);
-        }
-      `}</style>
     </>
   );
 };
