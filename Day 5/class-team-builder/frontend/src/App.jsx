@@ -1,7 +1,16 @@
-function App() {
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import GenerateTeams from "./pages/GenerateTeams";
+import StudentRegister from "./pages/StudentRegister";
+import TeacherRegister from "./pages/TeacherRegister";
+
+export default function App() {
   return (
-    <div className="text-xl font-bold text-center">Class Team Builder</div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/student/register" element={<StudentRegister />} />
+        <Route path="/teacher/register" element={<TeacherRegister />} />
+        <Route path="/generate-teams" element={<GenerateTeams />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

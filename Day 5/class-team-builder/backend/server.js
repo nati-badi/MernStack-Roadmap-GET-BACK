@@ -5,6 +5,8 @@ import connectDB from "./config/db.js";
 import studentAuthRoutes from "./routes/studentAuthRoutes.js";
 import teacherAuthRoutes from "./routes/teacherAuthRoutes.js";
 
+import teamRoutes from "./routes/teamRoutes.js";
+
 dotenv.config();
 
 const app = express();
@@ -15,6 +17,7 @@ app.use(cors());
 
 app.use("/api/auth/teacher", teacherAuthRoutes);
 app.use("/api/auth/student", studentAuthRoutes);
+app.use("/api/teams", teamRoutes);
 
 connectDB();
 
