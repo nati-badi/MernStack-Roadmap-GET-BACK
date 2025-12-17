@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema(
   {
-    fullName: { type: String, required: true },
-    studentId: { type: String, required: true, unique: true },
+    name: { type: String, required: true }, // matches frontend "name"
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
 
-    gpa: { type: Number, default: null },
-    skills: { type: [String], default: [] },
+    gpa: { type: Number, default: null }, // matches frontend "gpa"
+    major: { type: String, default: "" }, // matches frontend "major"
+    skills: { type: [String], default: [] }, // optional extra field
   },
   { timestamps: true }
 );

@@ -1,18 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/Input";
+import { registerTeacher, registerStudent } from "../api/auth";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function Login() {
+export default function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    role: "teacher", // or "student"
+    role: "teacher",
+    name: "",
     email: "",
     password: "",
+    gpa: "",
+    major: "",
   });
 
   const handleChange = (e) =>
@@ -24,6 +28,8 @@ export default function Login() {
 
     try {
       if (form.role === "teacher") {
+        await registerTeacher(form);
+        // auto-login teacher
         const res = await axios.post(
           "http://localhost:5000/api/auth/teacher/login",
           {
@@ -33,10 +39,11 @@ export default function Login() {
         );
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.teacher));
-        localStorage.setItem("role", "teacher");
-        toast.success("✅ Logged in as Teacher");
+        toast.success("✅ Teacher registered & logged in");
         navigate("/teacher/dashboard");
       } else {
+        await registerStudent(form);
+        // auto-login student
         const res = await axios.post(
           "http://localhost:5000/api/auth/student/login",
           {
@@ -46,16 +53,13 @@ export default function Login() {
         );
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.student));
-        localStorage.setItem("role", "student");
-        toast.success("✅ Logged in as Student");
+        toast.success("✅ Student registered & logged in");
         navigate("/student/dashboard");
       }
     } catch (err) {
-      const msg =
-        err.response?.data?.msg ||
-        err.response?.data?.error ||
-        "❌ Invalid credentials";
-      toast.error(msg);
+      toast.error(
+        err.response?.data?.msg || "❌ Server error, please try again later"
+      );
       console.error(err);
     } finally {
       setLoading(false);
@@ -63,12 +67,14 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
         {/* Header */}
         <div className="flex flex-col items-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">Login</h2>
-          <p className="text-gray-500 text-sm mt-2">Access your dashboard</p>
+          <h2 className="text-2xl font-bold text-gray-900">Create Account</h2>
+          <p className="text-gray-500 text-sm mt-2">
+            Register as a teacher or student to start building teams
+          </p>
         </div>
 
         {/* Role Tabs */}
@@ -100,6 +106,12 @@ export default function Login() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
+            label="Name"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+          />
+          <Input
             label="Email"
             name="email"
             type="email"
@@ -114,6 +126,25 @@ export default function Login() {
             onChange={handleChange}
           />
 
+          {form.role === "student" && (
+            <>
+              <Input
+                label="GPA"
+                name="gpa"
+                type="number"
+                step="0.01"
+                value={form.gpa}
+                onChange={handleChange}
+              />
+              <Input
+                label="Major"
+                name="major"
+                value={form.major}
+                onChange={handleChange}
+              />
+            </>
+          )}
+
           <button
             type="submit"
             disabled={loading}
@@ -123,19 +154,19 @@ export default function Login() {
                 : "bg-gray-900 hover:bg-gray-700 text-white shadow-md hover:shadow-lg"
             }`}
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
-        {/* Switch to Register */}
+        {/* Switch to Login */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500">
-            Don’t have an account?{" "}
+            Already have an account?{" "}
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/login")}
               className="text-gray-900 font-semibold hover:underline"
             >
-              Create one
+              Login here
             </button>
           </p>
         </div>

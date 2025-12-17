@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 export const registerStudent = async (req, res) => {
   try {
-    const { fullName, studentId, email, password } = req.body;
+    const { name, email, password, gpa, major } = req.body;
 
     const studentExists = await Student.findOne({ email });
     if (studentExists)
@@ -13,10 +13,11 @@ export const registerStudent = async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
 
     const student = await Student.create({
-      fullName,
-      studentId,
+      name,
       email,
       password: hashed,
+      gpa,
+      major,
     });
 
     res.json({ msg: "Student registered", student });
@@ -43,8 +44,9 @@ export const loginStudent = async (req, res) => {
       token,
       student: {
         id: student._id,
-        fullName: student.fullName,
-        studentId: student.studentId,
+        name: student.name,
+        gpa: student.gpa,
+        major: student.major,
         email: student.email,
       },
     });

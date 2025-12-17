@@ -1,16 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import GenerateTeams from "./pages/GenerateTeams";
-import StudentRegister from "./pages/StudentRegister";
-import TeacherRegister from "./pages/TeacherRegister";
+import { ToastContainer } from "react-toastify";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 
-export default function App() {
+function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/student/register" element={<StudentRegister />} />
-        <Route path="/teacher/register" element={<TeacherRegister />} />
-        <Route path="/generate-teams" element={<GenerateTeams />} />
+        <Route path="/" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
+      <ToastContainer position="top-right" autoClose={3000} />
     </BrowserRouter>
   );
 }
+
+export default App;
