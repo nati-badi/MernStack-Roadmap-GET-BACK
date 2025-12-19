@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 export default function StudentDashboard() {
   const [student, setStudent] = useState(null);
@@ -40,12 +41,22 @@ export default function StudentDashboard() {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
   };
 
-  const handleUpdateProfile = (e) => {
+  const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    // For now just update local state; backend integration comes next
-    setStudent({ ...student, gpa: editForm.gpa, major: editForm.major });
-    localStorage.setItem("user", JSON.stringify({ ...student, ...editForm }));
-    toast.success("✅ Profile updated (frontend only)");
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.put(
+        `http://localhost:5000/api/auth/student/${student._id}`,
+        { gpa: editForm.gpa, major: editForm.major },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setStudent(res.data.student);
+      localStorage.setItem("user", JSON.stringify(res.data.student));
+      toast.success("✅ Profile updated successfully");
+    } catch (err) {
+      toast.error(err.response?.data?.msg || "❌ Error updating profile");
+    }
   };
 
   if (!student) return null;

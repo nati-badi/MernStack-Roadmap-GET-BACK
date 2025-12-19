@@ -42,15 +42,33 @@ export const loginStudent = async (req, res) => {
 
     res.json({
       token,
-      student: {
-        id: student._id,
-        name: student.name,
-        gpa: student.gpa,
-        major: student.major,
-        email: student.email,
-      },
+      student,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+export const updateStudentProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (req.user.id !== id) {
+      return res.status(403).json({ msg: "Unauthorized" });
+    }
+
+    const { gpa, major } = req.body;
+
+    const student = await Student.findByIdAndUpdate(
+      id,
+      { gpa, major },
+      { new: true }
+    );
+
+    if (!student) return res.status(404).json({ msg: "Student not found" });
+
+    res.json({ student });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", error: err.message });
   }
 };

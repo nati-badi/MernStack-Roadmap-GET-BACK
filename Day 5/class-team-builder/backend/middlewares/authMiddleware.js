@@ -7,7 +7,7 @@ export const protect = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.teacher = decoded;
+    req.user = decoded; // ✅ use a generic property
     next();
   } catch (error) {
     return res.status(401).json({ msg: "Invalid token" });
