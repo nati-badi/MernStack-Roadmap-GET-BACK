@@ -49,3 +49,33 @@ export const loginTeacher = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const updateTeacherProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (req.user.id !== id) {
+      return res.status(403).json({ msg: "Unauthorized" });
+    }
+
+    const { name, email } = req.body;
+
+    const teacher = await Teacher.findByIdAndUpdate(
+      id,
+      { name, email },
+      { new: true }
+    );
+
+    if (!teacher) return res.status(404).json({ msg: "Teacher not found" });
+
+    res.json({
+      teacher: {
+        id: teacher._id,
+        name: teacher.name,
+        email: teacher.email,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", error: err.message });
+  }
+};

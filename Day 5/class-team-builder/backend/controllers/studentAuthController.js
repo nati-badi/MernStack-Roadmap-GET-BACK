@@ -72,3 +72,12 @@ export const updateStudentProfile = async (req, res) => {
     res.status(500).json({ msg: "Server error", error: err.message });
   }
 };
+
+export const getAllStudents = async (req, res) => {
+  try {
+    const students = await Student.find().select("id name email gpa major");
+    res.json({ students });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", error: err.message });
+  }
+};

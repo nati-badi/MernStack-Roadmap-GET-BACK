@@ -15,7 +15,7 @@ export default function StudentDashboard() {
     const user = localStorage.getItem("user");
 
     if (!token || role !== "student") {
-      toast.error("❌ Unauthorized. Please login as a student.");
+      toast.error("❌ Unauthorized. Please login!");
       navigate("/login");
       return;
     }

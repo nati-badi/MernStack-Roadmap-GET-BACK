@@ -15,7 +15,7 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    gpa: "",
+    gpa: null,
     major: "",
   });
 
@@ -28,7 +28,13 @@ export default function Register() {
 
     try {
       if (form.role === "teacher") {
-        await registerTeacher(form);
+        const teacherPayload = {
+          name: form.name,
+          email: form.email,
+          password: form.password,
+        };
+
+        await registerTeacher(teacherPayload);
         // auto-login teacher
         const res = await axios.post(
           "http://localhost:5000/api/auth/teacher/login",
@@ -39,10 +45,21 @@ export default function Register() {
         );
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.teacher));
+        localStorage.setItem("role", "teacher");
+
         toast.success("✅ Teacher registered & logged in");
         navigate("/teacher/dashboard");
       } else {
-        await registerStudent(form);
+        const studentPayload = {
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          role: "student",
+          gpa: form.gpa === null ? undefined : Number(form.gpa),
+          major: form.major,
+        };
+
+        await registerStudent(studentPayload);
         // auto-login student
         const res = await axios.post(
           "http://localhost:5000/api/auth/student/login",
@@ -53,6 +70,8 @@ export default function Register() {
         );
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.student));
+        localStorage.setItem("role", "student");
+
         toast.success("✅ Student registered & logged in");
         navigate("/student/dashboard");
       }
@@ -134,7 +153,9 @@ export default function Register() {
                 type="number"
                 step="0.01"
                 value={form.gpa}
-                onChange={handleChange}
+                onChange={(e) =>
+                  setForm({ ...form, gpa: Number(e.target.value) })
+                }
               />
               <Input
                 label="Major"
