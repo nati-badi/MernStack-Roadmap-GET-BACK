@@ -10,15 +10,18 @@ export const registerStudent = async (req, res) => {
     if (studentExists)
       return res.status(400).json({ msg: "Email already used" });
 
-    const hashed = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const student = await Student.create({
+    const student = new Student({
       name,
       email,
-      password: hashed,
-      gpa,
+      password: hashedPassword,
       major,
+      gpa,
+      studentId: `STU-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     });
+
+    await student.save();
 
     res.json({ msg: "Student registered", student });
   } catch (err) {

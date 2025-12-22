@@ -15,7 +15,7 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    gpa: null,
+    gpa: "",
     major: "",
   });
 
@@ -50,13 +50,18 @@ export default function Register() {
         toast.success("✅ Teacher registered & logged in");
         navigate("/teacher/dashboard");
       } else {
+        if (!form.major.trim()) {
+          toast.error("Major is required");
+          setLoading(false);
+          return;
+        }
+
         const studentPayload = {
-          name: form.name,
-          email: form.email,
+          name: form.name.trim(),
+          email: form.email.trim(),
           password: form.password,
-          role: "student",
-          gpa: form.gpa === null ? undefined : Number(form.gpa),
-          major: form.major,
+          gpa: form.gpa ? Number(form.gpa) : undefined,
+          major: form.major.trim(),
         };
 
         await registerStudent(studentPayload);
@@ -76,10 +81,12 @@ export default function Register() {
         navigate("/student/dashboard");
       }
     } catch (err) {
+      console.error(err.response?.data || err);
       toast.error(
-        err.response?.data?.msg || "❌ Server error, please try again later"
+        err.response?.data?.msg ||
+          err.response?.data?.error ||
+          "Server error, please try again"
       );
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -153,9 +160,7 @@ export default function Register() {
                 type="number"
                 step="0.01"
                 value={form.gpa}
-                onChange={(e) =>
-                  setForm({ ...form, gpa: Number(e.target.value) })
-                }
+                onChange={handleChange}
               />
               <Input
                 label="Major"

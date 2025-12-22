@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema(
   {
+    studentId: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     name: { type: String, required: true }, // matches frontend "name"
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
